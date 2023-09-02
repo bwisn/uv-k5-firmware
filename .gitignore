@@ -5,4 +5,4 @@ firmware.bin
 link-overlay.S
 sram-overlay
 sram-overlay.bin
-
+.vscode

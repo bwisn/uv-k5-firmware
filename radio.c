@@ -76,12 +76,10 @@ bool RADIO_CheckValidChannel(uint16_t Channel, bool bCheckScanList, uint8_t VFO)
 		default:
 			return true;
 		}
-		if (PriorityCh1 == Channel) {
+		if (PriorityCh1 == Channel || PriorityCh2 == Channel) {
 			return false;
 		}
-		if (PriorityCh2 == Channel) {
-			return false;
-		}
+
 	}
 
 	return true;
@@ -820,4 +818,3 @@ void RADIO_SendEndOfTransmission(void)
 	}
 	BK4819_ExitDTMF_TX(true);
 }
-

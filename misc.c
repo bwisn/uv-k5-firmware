@@ -13,9 +13,9 @@
  *     See the License for the specific language governing permissions and
  *     limitations under the License.
  */
+#include "misc.h"
 
 #include <string.h>
-#include "misc.h"
 
 const uint32_t *gUpperLimitFrequencyBandTable;
 const uint32_t *gLowerLimitFrequencyBandTable;
@@ -30,10 +30,10 @@ bool gSetting_ScrambleEnable;
 uint8_t gSetting_F_LOCK;
 
 const uint32_t gDefaultAesKey[4] = {
-	0x4AA5CC60,
-	0x0312CC5F,
-	0xFFD2DABB,
-	0x6BBA7F92,
+    0x4AA5CC60,
+    0x0312CC5F,
+    0xFFD2DABB,
+    0x6BBA7F92,
 };
 
 uint32_t gCustomAesKey[4];
@@ -179,45 +179,31 @@ bool gIsLocked;
 
 void NUMBER_Get(char *pDigits, uint32_t *pInteger)
 {
-	uint32_t Value;
-	uint32_t Multiplier;
-	uint8_t i;
+    uint32_t Value = 0;
 
-	Multiplier = 10000000;
-	Value = 0;
-	for (i = 0; i < 8; i++) {
-		if (pDigits[i] > 9) {
-			break;
-		}
-		Value += pDigits[i] * Multiplier;
-		Multiplier /= 10U;
-	}
-	*pInteger = Value;
+    for (uint8_t i = 0; i < 8; i++) {
+        if (pDigits[i] > 9) {
+            break;
+        }
+        Value = Value * 10U + pDigits[i];
+    }
+
+    *pInteger = Value;
 }
 
 void NUMBER_ToDigits(uint32_t Value, char *pDigits)
 {
-	uint8_t i;
-
-	for (i = 0; i < 8; i++) {
-		uint32_t Result = Value / 10U;
-
-		pDigits[7 - i] = Value - (Result * 10U);
-		Value = Result;
-	}
+    for (int8_t i = 7; i >= 0; i--, Value /= 10U) {
+        pDigits[i] = '0' + (Value % 10U);
+    }
 }
 
 uint8_t NUMBER_AddWithWraparound(uint8_t Base, int8_t Add, uint8_t LowerLimit, uint8_t UpperLimit)
 {
-	Base += Add;
-	if (Base == 0xFF || Base < LowerLimit) {
-		return UpperLimit;
-	}
+    uint16_t result = (uint16_t)Base + Add;
 
-	if (Base > UpperLimit) {
-		return LowerLimit;
-	}
-
-	return Base;
+    if (result > UpperLimit) {
+        return (result <= 0xFF) ? LowerLimit : UpperLimit;
+    }
+    return result;
 }
-

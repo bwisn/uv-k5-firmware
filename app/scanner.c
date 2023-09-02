@@ -236,35 +236,33 @@ static void SCANNER_Key_UP_DOWN(bool bKeyPressed, bool pKeyHeld, int8_t Directio
 
 void SCANNER_ProcessKeys(KEY_Code_t Key, bool bKeyPressed, bool bKeyHeld)
 {
-	switch (Key) {
-	case KEY_0: case KEY_1: case KEY_2: case KEY_3:
-	case KEY_4: case KEY_5: case KEY_6: case KEY_7:
-	case KEY_8: case KEY_9:
-		SCANNER_Key_DIGITS(Key, bKeyPressed, bKeyHeld);
-		break;
-	case KEY_MENU:
-		SCANNER_Key_MENU(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_UP:
-		SCANNER_Key_UP_DOWN(bKeyPressed, bKeyHeld, 1);
-		break;
-	case KEY_DOWN:
-		SCANNER_Key_UP_DOWN(bKeyPressed, bKeyHeld, -1);
-		break;
-	case KEY_EXIT:
-		SCANNER_Key_EXIT(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_STAR:
-		SCANNER_Key_STAR(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_PTT:
-		GENERIC_Key_PTT(bKeyPressed);
-		break;
-	default:
-		if (!bKeyHeld && bKeyPressed) {
-			gBeepToPlay = BEEP_500HZ_60MS_DOUBLE_BEEP_OPTIONAL;
-		}
-		break;
-	}
+    if (Key >= KEY_0 && Key <= KEY_9) {
+        SCANNER_Key_DIGITS(Key, bKeyPressed, bKeyHeld);
+    } else {
+        switch (Key) {
+            case KEY_MENU:
+                SCANNER_Key_MENU(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_UP:
+                SCANNER_Key_UP_DOWN(bKeyPressed, bKeyHeld, 1);
+                break;
+            case KEY_DOWN:
+                SCANNER_Key_UP_DOWN(bKeyPressed, bKeyHeld, -1);
+                break;
+            case KEY_EXIT:
+                SCANNER_Key_EXIT(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_STAR:
+                SCANNER_Key_STAR(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_PTT:
+                GENERIC_Key_PTT(bKeyPressed);
+                break;
+            default:
+                if (!bKeyHeld && bKeyPressed) {
+                    gBeepToPlay = BEEP_500HZ_60MS_DOUBLE_BEEP_OPTIONAL;
+                }
+                break;
+        }
+    }
 }
-

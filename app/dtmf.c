@@ -14,7 +14,9 @@
  *     limitations under the License.
  */
 
+
 #include <string.h>
+
 #include "app/fm.h"
 #include "bsp/dp32g030/gpio.h"
 #include "driver/bk4819.h"
@@ -104,26 +106,11 @@ bool DTMF_FindContact(const char *pContact, char *pResult)
 
 char DTMF_GetCharacter(uint8_t Code)
 {
-	switch(Code) {
-	case 0: case 1: case 2: case 3:
-	case 4: case 5: case 6: case 7:
-	case 8: case 9:
-		return '0' + (char)Code;
-	case 10:
-		return 'A';
-	case 11:
-		return 'B';
-	case 12:
-		return 'C';
-	case 13:
-		return 'D';
-	case 14:
-		return '*';
-	case 15:
-		return '#';
-	}
-
-	return 0xFF;
+    const char table[] = "0123456789ABCD*#";
+    if (Code < sizeof(table) - 1) {
+        return table[Code];
+    }
+    return 0xFF;
 }
 
 bool DTMF_CompareMessage(const char *pDTMF, const char *pTemplate, uint8_t Size, bool bFlag)
@@ -144,18 +131,12 @@ bool DTMF_CompareMessage(const char *pDTMF, const char *pTemplate, uint8_t Size,
 
 bool DTMF_IsGroupCall(const char *pDTMF, uint32_t Size)
 {
-	uint32_t i;
-
-	for (i = 0; i < Size; i++) {
-		if (pDTMF[i] == gEeprom.DTMF_GROUP_CALL_CODE) {
-			break;
-		}
-	}
-	if (i != Size) {
-		return true;
-	}
-
-	return false;
+    for (uint32_t i = 0; i < Size; i++) {
+        if (pDTMF[i] == gEeprom.DTMF_GROUP_CALL_CODE) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void DTMF_Append(char Code)
@@ -337,4 +318,3 @@ void DTMF_Reply(void)
 	gEnableSpeaker = false;
 	BK4819_ExitDTMF_TX(false);
 }
-

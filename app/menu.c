@@ -104,90 +104,103 @@ static void FUN_000074f8(int8_t Direction)
 
 int MENU_GetLimits(uint8_t Cursor, uint8_t *pMin, uint8_t *pMax)
 {
-	switch (Cursor) {
-	case MENU_SQL:
-		*pMin = 0;
-		*pMax = 9;
-		break;
-	case MENU_STEP:
-		if (gTxInfo->Band == BAND2_108MHz) {
-			*pMin = 0;
-			*pMax = 6;
-			break;
-		}
-		// Fallthrough
-	case MENU_ABR: case MENU_F_LOCK:
-		*pMin = 0;
-		*pMax = 5;
-		break;
-	case MENU_TXP: case MENU_SFT_D:
-	case MENU_TDR: case MENU_WX:
-	case MENU_VOICE: case MENU_SC_REV:
-	case MENU_MDF: case MENU_PONMSG:
-	case MENU_ROGER:
-		*pMin = 0;
-		*pMax = 2;
-		break;
-	case MENU_R_DCS: case MENU_T_DCS:
-		*pMin = 0;
-		*pMax = 208;
-		break;
-	case MENU_R_CTCS: case MENU_T_CTCS:
-		*pMin = 0;
-		*pMax = 50;
-		break;
-	case MENU_W_N: case MENU_BCL:
-	case MENU_BEEP: case MENU_AUTOLK:
-	case MENU_S_ADD1: case MENU_S_ADD2:
-	case MENU_STE: case MENU_AL_MOD:
-	case MENU_D_ST: case MENU_D_DCD:
-	case MENU_AM: case MENU_NOAA_S:
-	case MENU_RESET: case MENU_350TX:
-	case MENU_200TX: case MENU_500TX:
-	case MENU_350EN: case MENU_SCREN:
-		*pMin = 0;
-		*pMax = 1;
-		break;
-	case MENU_SCR: case MENU_VOX:
-	case MENU_TOT: case MENU_RP_STE:
-		*pMin = 0;
-		*pMax = 10;
-		break;
-	case MENU_MEM_CH: case MENU_1_CALL:
-	case MENU_SLIST1: case MENU_SLIST2:
-	case MENU_DEL_CH:
-		*pMin = 0;
-		*pMax = 199;
-		break;
-	case MENU_SAVE: case MENU_MIC:
-		*pMin = 0;
-		*pMax = 4;
-		break;
-	case MENU_S_LIST:
-		*pMin = 1;
-		*pMax = 2;
-		break;
-	case MENU_D_RSP: case MENU_PTT_ID:
-		*pMin = 0;
-		*pMax = 3;
-		break;
-	case MENU_D_HOLD:
-		*pMin = 5;
-		*pMax = 60;
-		break;
-	case MENU_D_PRE:
-		*pMin = 3;
-		*pMax = 99;
-		break;
-	case MENU_D_LIST:
-		*pMin = 1;
-		*pMax = 16;
-		break;
-	default:
-		return -1;
-	}
+    *pMin = 0;
 
-	return 0;
+    switch (Cursor) {
+        case MENU_SQL:
+            *pMax = 9;
+            break;
+        case MENU_STEP:
+            if (gTxInfo->Band == BAND2_108MHz) {
+                *pMax = 6;
+                break;
+            }
+            // Fallthrough
+        case MENU_ABR:
+        case MENU_F_LOCK:
+            *pMax = 5;
+            break;
+        case MENU_TXP:
+        case MENU_SFT_D:
+        case MENU_TDR:
+        case MENU_WX:
+        case MENU_VOICE:
+        case MENU_SC_REV:
+        case MENU_MDF:
+        case MENU_PONMSG:
+        case MENU_ROGER:
+            *pMax = 2;
+            break;
+        case MENU_R_DCS:
+        case MENU_T_DCS:
+            *pMax = 208;
+            break;
+        case MENU_R_CTCS:
+        case MENU_T_CTCS:
+            *pMax = 50;
+            break;
+        case MENU_W_N:
+        case MENU_BCL:
+        case MENU_BEEP:
+        case MENU_AUTOLK:
+        case MENU_S_ADD1:
+        case MENU_S_ADD2:
+        case MENU_STE:
+        case MENU_AL_MOD:
+        case MENU_D_ST:
+        case MENU_D_DCD:
+        case MENU_AM:
+        case MENU_NOAA_S:
+        case MENU_RESET:
+        case MENU_350TX:
+        case MENU_200TX:
+        case MENU_500TX:
+        case MENU_350EN:
+        case MENU_SCREN:
+            *pMax = 1;
+            break;
+        case MENU_SCR:
+        case MENU_VOX:
+        case MENU_TOT:
+        case MENU_RP_STE:
+            *pMax = 10;
+            break;
+        case MENU_MEM_CH:
+        case MENU_1_CALL:
+        case MENU_SLIST1:
+        case MENU_SLIST2:
+        case MENU_DEL_CH:
+            *pMax = 199;
+            break;
+        case MENU_SAVE:
+        case MENU_MIC:
+            *pMax = 4;
+            break;
+        case MENU_S_LIST:
+            *pMin = 1;
+            *pMax = 2;
+            break;
+        case MENU_D_RSP:
+        case MENU_PTT_ID:
+            *pMax = 3;
+            break;
+        case MENU_D_HOLD:
+            *pMin = 5;
+            *pMax = 60;
+            break;
+        case MENU_D_PRE:
+            *pMin = 3;
+            *pMax = 99;
+            break;
+        case MENU_D_LIST:
+            *pMin = 1;
+            *pMax = 16;
+            break;
+        default:
+            return -1;
+    }
+
+    return 0;
 }
 
 void MENU_AcceptSetting(void)
@@ -1095,43 +1108,40 @@ static void MENU_Key_UP_DOWN(bool bKeyPressed, bool bKeyHeld, int8_t Direction)
 	gRequestDisplayScreen = DISPLAY_MENU;
 }
 
-void MENU_ProcessKeys(KEY_Code_t Key, bool bKeyPressed, bool bKeyHeld)
-{
-	switch (Key) {
-	case KEY_0: case KEY_1: case KEY_2: case KEY_3:
-	case KEY_4: case KEY_5: case KEY_6: case KEY_7:
-	case KEY_8: case KEY_9:
-		MENU_Key_DIGITS(Key, bKeyPressed, bKeyHeld);
-		break;
-	case KEY_MENU:
-		MENU_Key_MENU(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_UP:
-		MENU_Key_UP_DOWN(bKeyPressed, bKeyHeld, 1);
-		break;
-	case KEY_DOWN:
-		MENU_Key_UP_DOWN(bKeyPressed, bKeyHeld, -1);
-		break;
-	case KEY_EXIT:
-		MENU_Key_EXIT(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_STAR:
-		MENU_Key_STAR(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_F:
-		GENERIC_Key_F(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_PTT:
-		GENERIC_Key_PTT(bKeyPressed);
-		break;
-	default:
-		if (!bKeyHeld && bKeyPressed) {
-			gBeepToPlay = BEEP_500HZ_60MS_DOUBLE_BEEP_OPTIONAL;
-		}
-		break;
-	}
-	if (gScreenToDisplay == DISPLAY_MENU && gMenuCursor == MENU_VOL) {
-		g_20000393 = 0x20;
-	}
-}
+void MENU_ProcessKeys(KEY_Code_t Key, bool bKeyPressed, bool bKeyHeld) {
+    if (Key >= KEY_0 && Key <= KEY_9) {
+        MENU_Key_DIGITS(Key, bKeyPressed, bKeyHeld);
+    } else {
+        switch (Key) {
+            case KEY_MENU:
+                MENU_Key_MENU(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_UP:
+                MENU_Key_UP_DOWN(bKeyPressed, bKeyHeld, 1);
+                break;
+            case KEY_DOWN:
+                MENU_Key_UP_DOWN(bKeyPressed, bKeyHeld, -1);
+                break;
+            case KEY_EXIT:
+                MENU_Key_EXIT(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_STAR:
+                MENU_Key_STAR(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_F:
+                GENERIC_Key_F(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_PTT:
+                GENERIC_Key_PTT(bKeyPressed);
+                break;
+            default:
+                if (!bKeyHeld && bKeyPressed) {
+                    gBeepToPlay = BEEP_500HZ_60MS_DOUBLE_BEEP_OPTIONAL;
+                }
+        }
+    }
 
+    if (gScreenToDisplay == DISPLAY_MENU && gMenuCursor == MENU_VOL) {
+        g_20000393 = 0x20;
+    }
+}

@@ -49,21 +49,14 @@ bool FM_CheckValidChannel(uint8_t Channel)
 
 uint8_t FM_FindNextChannel(uint8_t Channel, uint8_t Direction)
 {
-	uint8_t i;
-
-	for (i = 0; i < 20; i++) {
-		if (Channel == 0xFF) {
-			Channel = 19;
-		} else if (Channel >= 20) {
-			Channel = 0;
-		}
-		if (FM_CheckValidChannel(Channel)) {
-			return Channel;
-		}
-		Channel += Direction;
-	}
-
-	return 0xFF;
+    for (uint8_t i = 0; i < 20; i++) {
+        Channel %= 20;
+        if (FM_CheckValidChannel(Channel)) {
+            return Channel;
+        }
+        Channel += Direction;
+    }
+    return 0xFF;
 }
 
 int FM_ConfigureChannelState(void)
@@ -97,15 +90,15 @@ void FM_TurnOff(void)
 
 void FM_EraseChannels(void)
 {
-	uint8_t i;
-	uint8_t Template[8];
+    uint8_t i;
+    uint8_t Template[8];
 
-	memset(Template, 0xFF, sizeof(Template));
-	for (i = 0; i < 5; i++) {
-		EEPROM_WriteBuffer(0x0E40 + (i * 8), Template);
-	}
+    memset(Template, 0xFF, sizeof(Template));
+    for (i = 0; i < 5; i++) {
+        EEPROM_WriteBuffer(0x0E40 + (i * 8), Template);
+    }
 
-	memset(gFM_Channels, 0xFF, sizeof(gFM_Channels));
+    memset(gFM_Channels, 0xFF, sizeof(gFM_Channels));
 }
 
 void FM_Tune(uint16_t Frequency, int8_t Step, bool bFlag)
@@ -461,36 +454,35 @@ Bail:
 
 void FM_ProcessKeys(KEY_Code_t Key, bool bKeyPressed, bool bKeyHeld)
 {
-	switch (Key) {
-	case KEY_0: case KEY_1: case KEY_2: case KEY_3:
-	case KEY_4: case KEY_5: case KEY_6: case KEY_7:
-	case KEY_8: case KEY_9:
-		FM_Key_DIGITS(Key, bKeyPressed, bKeyHeld);
-		break;
-	case KEY_MENU:
-		FM_Key_MENU(bKeyPressed, bKeyHeld);
-		return;
-	case KEY_UP:
-		FM_Key_UP_DOWN(bKeyPressed, bKeyHeld, 1);
-		break;
-	case KEY_DOWN:
-		FM_Key_UP_DOWN(bKeyPressed, bKeyHeld, -1);
-		break;;
-	case KEY_EXIT:
-		FM_Key_EXIT(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_F:
-		GENERIC_Key_F(bKeyPressed, bKeyHeld);
-		break;
-	case KEY_PTT:
-		GENERIC_Key_PTT(bKeyPressed);
-		break;
-	default:
-		if (!bKeyHeld && bKeyPressed) {
-			gBeepToPlay = BEEP_500HZ_60MS_DOUBLE_BEEP_OPTIONAL;
-		}
-		break;
-	}
+    if (Key >= KEY_0 && Key <= KEY_9) {
+        FM_Key_DIGITS(Key, bKeyPressed, bKeyHeld);
+    } else {
+        switch (Key) {
+            case KEY_MENU:
+                FM_Key_MENU(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_UP:
+                FM_Key_UP_DOWN(bKeyPressed, bKeyHeld, 1);
+                break;
+            case KEY_DOWN:
+                FM_Key_UP_DOWN(bKeyPressed, bKeyHeld, -1);
+                break;
+            case KEY_EXIT:
+                FM_Key_EXIT(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_F:
+                GENERIC_Key_F(bKeyPressed, bKeyHeld);
+                break;
+            case KEY_PTT:
+                GENERIC_Key_PTT(bKeyPressed);
+                break;
+            default:
+                if (!bKeyHeld && bKeyPressed) {
+                    gBeepToPlay = BEEP_500HZ_60MS_DOUBLE_BEEP_OPTIONAL;
+                }
+                break;
+        }
+    }
 }
 
 void FM_Play(void)
@@ -558,4 +550,3 @@ void FM_Switch(void)
 		gRequestDisplayScreen = DISPLAY_FM;
 	}
 }
-

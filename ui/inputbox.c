@@ -22,11 +22,15 @@ uint8_t gInputBoxIndex;
 
 void INPUTBOX_Append(char Digit)
 {
-	if (gInputBoxIndex == 0) {
-		memset(gInputBox, 10, sizeof(gInputBox));
-	} else if (gInputBoxIndex >= sizeof(gInputBox)) {
-		return;
-	}
-	gInputBox[gInputBoxIndex++] = Digit;
+    if (gInputBoxIndex < sizeof(gInputBox)) {
+        if (gInputBoxIndex == 0) {
+            gInputBox[0] = Digit;
+            for (uint8_t i = 1; i < sizeof(gInputBox); ++i) {
+                gInputBox[i] = 10;
+            }
+        } else {
+            gInputBox[gInputBoxIndex] = Digit;
+        }
+        gInputBoxIndex++;
+    }
 }
-
